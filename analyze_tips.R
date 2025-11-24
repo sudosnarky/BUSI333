@@ -20,7 +20,7 @@ ate_gva <- washio %>%
   group_by(treatment_dummy) %>%
   summarise(mean_tip = mean(tip_amount, na.rm = TRUE)) %>% 
   summarise(ate = diff(mean_tip))
-print(ate_trt_gva)
+print(ate_gva)
 
 ate_satis_gva <- washio %>% 
   group_by(treatment_dummy) %>% 
@@ -50,12 +50,32 @@ compute_randomized_ate <- function() {
 
 distribution_tipamt <- replicate(100000, compute_randomized_ate())
 distribution_tipamt[1:5]
-hist(distribution_tipamt, main = "Randomized ATE Distribution for Tip Amount", xlab = "ATE", col = "green")
 
-# Calculate p-value
 observed_ate <- ate_gva$ate
+hist(distribution_tipamt, main = "Randomized ATE Distribution for Tip Amount", xlab = "ATE", col = "green")
+abline(v = observed_ate, col = "red", lwd = 2)
 p_value <- mean(abs(distribution_tipamt) >= abs(observed_ate))
 print(p_value)
-
 p_value_ttest <- t.test(tip_amount ~ treatment_dummy, data = washio)$p.value
 print(p_value_ttest)
+if (p_value < 0.05) {
+  print("The observed ATE is statistically significant, suggesting an impact of the recommendation system.")
+} else {
+  print("The observed ATE is not statistically significant, suggesting no strong evidence of an impact of the recommendation system.")
+}
+t_test_result <- t.test(tip_amount ~ treatment_dummy, data = washio)
+print(t_test_result)
+
+observed_ate_satis <- ate_satis_gva
+hist(distribution_tipamt, main = "Randomized ATE Distribution for Satisfaction Rating", xlab = "ATE", col = "purple")
+abline(v = observed_ate_satis, col = "red", lwd = 2)
+p_value_satis <- mean(abs(distribution_tipamt) >= abs(observed_ate_satis))
+print(paste("P-value for satisfaction rating:", p_value_satis))
+if (p_value_satis < 0.05) {
+  print("The observed ATE for satisfaction rating is statistically significant, suggesting an impact of the recommendation system.")
+} else {
+  print("The observed ATE for satisfaction rating is not statistically significant, suggesting no strong evidence of an impact of the recommendation system.")
+}
+t_test_satis_result <- t.test(satisfaction_rating ~ treatment_dummy, data = washio)
+print(t_test_satis_result)
+
