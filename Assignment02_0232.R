@@ -1,10 +1,4 @@
-
-library(tidyverse)
-library(haven)
-library(ggplot2)
-library(dplyr)
-library(gridExtra)
-library(grid)
+pacman :: p_load(tidyverse, haven, ggplot2, dplyr, gridExtra, grid)
 
 data <- read_dta('data/master_establishments_1880_1905.dta')
 
