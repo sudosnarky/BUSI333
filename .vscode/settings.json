@@ -14,5 +14,6 @@
   "r.source.focus": "terminal",
   "r.source.encoding": "UTF-8",
   "r.enableRPreview": false,
-  "r.enableRHelp": true
+  "r.enableRHelp": true,
+  "r.lsp.promptToInstall": false
 }

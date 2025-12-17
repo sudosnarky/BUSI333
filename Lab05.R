@@ -1,3 +1,5 @@
+setwd("/home/snarky404/GitHubRepos/BUSI333")
+#!/usr/bin/env Rscript
 #'
 #' Lab 05 guide
 pacman::p_load(tidyverse, data.table, broom)
